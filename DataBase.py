@@ -64,7 +64,25 @@ class Datos():
                 print("Error en la base de datos, la tabla 'eventos' no existe")
             else:
                 print(error)
+        cursor.close()
         self._conection.close()
+    
+    def tags_cross_idEvent(self, idEvent):
+        self.connectBD()
+        cursor = self._conection.cursor()
+
+        query = """SELECT tag.nombre FROM eventos e
+        INNER JOIN evento_etiqueta evtag ON e.idEvento = evtag.idEvento
+        INNER JOIN etiquetas tag ON evtag.idEtiqueta = tag.idEtiqueta
+        WHERE e.idEvento = %s"""
+
+        cursor.execute(query, (idEvent,))
+        
+        tags = cursor.fetchall()
+        
+        cursor.close()
+        self._conection.close()
+        return tags
 
     def _addday(self, event):
         day = event[4].day
@@ -184,8 +202,8 @@ class Datos():
 
 
 
-cronos = Datos("root", "ACL&cag20", "localhost","cronosdb")
+"""cronos = Datos("root", "ACL&cag20", "localhost","cronosdb")
 cronos.modifyevent(50,"estudiar programacion2", 200, datetime.today(), datetime(2023,7,2,0,0,0,0), "DEBES ESTUDIAR", 1, ("no procastines","programacion 2"))
 for x in cronos.eventsbyday[6]:
     print(x)
-    
+    """
