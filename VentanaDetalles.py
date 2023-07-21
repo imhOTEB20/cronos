@@ -265,6 +265,6 @@ class Form(ttk.Frame):
         
 
 
-root = tk.Tk()
+"""root = tk.Tk()
 form = Form(parent=root)
-root.mainloop()
+root.mainloop()"""
