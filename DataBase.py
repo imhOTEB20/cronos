@@ -77,15 +77,20 @@ class Datos():
         WHERE e.idEvento = %s"""
 
         cursor.execute(query, (idEvent,))
-        
-        tags = cursor.fetchall()
+
+        response = cursor.fetchall()
+        if len(response) != 0:
+            tags = response[0]
+        else:
+            tags = ()
         
         cursor.close()
         self._conection.close()
+        
         return tags
 
     def _addday(self, event):
-        day = event[4].day
+        day = event[3].day
         if day in self.eventsbyday:
             self.eventsbyday[day].add(list(event))
         else:
@@ -199,6 +204,29 @@ class Datos():
         self._conection.commit()
         cursor.close()
         self._conection.close()
+        self._events_for_month()
+        self._classify_events_by_day()
+    
+    def delete_event(self, idEvent):
+        self.connectBD()
+
+        cursor = self._conection.cursor()
+
+        query = """DELETE FROM evento_etiqueta
+        WHERE idEvento = %s"""
+
+        cursor.execute(query, (idEvent, ))
+
+        query = """DELETE FROM eventos
+        WHERE idEvento = %s"""
+
+        cursor.execute(query, (idEvent, ))
+        self._conection.commit()
+
+        cursor.close()
+        self._conection.close()
+        self._events_for_month()
+        self._classify_events_by_day()
 
 
 
