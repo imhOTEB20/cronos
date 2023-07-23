@@ -16,8 +16,10 @@ from Tag import Tag
 
 class Form(ttk.Frame):
     """Marco que contiene el formulario para crear o editar un evento."""
-    def __init__(self, parent, data=None):
+    def __init__(self, parent, data=None, extra_function=None, extra_function2=None):
         self._parent = parent
+        self._extra_function = extra_function
+        self._extra_function2 = extra_function2
         """data:  {title:'titulo del evento',
                     detail: 'detalles del event',
                     datetimeE: 'fecha y hora del evento',
@@ -53,13 +55,15 @@ class Form(ttk.Frame):
         ttk.Entry(self, textvariable = self._strvar_title, validate = "key",
                   validatecommand=(self.register(self._title_character_counter), '%P')
                   ).grid(sticky='nsew', row = self._row, column= 0)
+        self._title_char_counter = tk.StringVar()
         if self._data != None:
             self._strvar_title.set(self._data['title'])
+            self._title_char_counter.set(f"{len(self._data['title'])}/45")
+        else:
+            self._title_char_counter.set("0/45")
         title_count_frame = ttk.Frame(self)
         self._next_row()
         title_count_frame.grid(row = self._row, column=0)
-        self._title_char_counter = tk.StringVar()
-        self._title_char_counter.set("0/45")
         ttk.Label(title_count_frame,width=9).grid(row = 0, column = 0)
         ttk.Label(title_count_frame,width=9).grid(row = 0, column = 1)
         ttk.Label(title_count_frame, textvariable=self._title_char_counter).grid(row = 0, column = 2)
@@ -69,17 +73,19 @@ class Form(ttk.Frame):
         self._next_row()
         ttk.Label(self, text = "Detalles", padding = 3).grid(row = self._row, column = 0)
         self._detail_text = tk.Text(self, width = 20, height=5)
+        self._char_counter = tk.StringVar()
         if self._data != None:
             if self._data['detail'] != None:
                 self._detail_text.insert('1.0', self._data['detail'])
+                self._char_counter.set(f"{len(self._data['detail'])}/100")
+            else:
+                self._char_counter.set("0/100")
         self._next_row()
         self._detail_text.grid(row=self._row, column=0, sticky='nsew')
         self._detail_text.bind("<KeyRelease>", self._detail_character_counter)
         count_frame = ttk.Frame(self)
         self._next_row()
         count_frame.grid(row = self._row, column=0)
-        self._char_counter = tk.StringVar()
-        self._char_counter.set("0/100")
         ttk.Label(count_frame,width=9).grid(row = 0, column = 0)
         ttk.Label(count_frame,width=9).grid(row = 0, column = 1)
         ttk.Label(count_frame, textvariable=self._char_counter).grid(row = 0, column = 2)
@@ -140,12 +146,12 @@ class Form(ttk.Frame):
         relevance_frame.grid(row= self._row, column=0)
         ttk.Label(relevance_frame, text= 'Relevancia: ').grid(row= 0, column= 0)
         options = ['normal', 'importante']
-        option = tk.StringVar()
+        self._option = tk.StringVar()
         if self._data != None:
-            option.set(self._data['relevance'])
+            self._option.set(options[self._data['relevance']])
         else:
-            option.set('normal')
-        ttk.OptionMenu(relevance_frame, option, option.get(), *options).grid(row= 0, column= 1)
+            self._option.set('normal')
+        ttk.OptionMenu(relevance_frame, self._option, self._option.get(), *options).grid(row= 0, column= 1)
     
     def _config_buttons_confirm(self):
         self._next_row()
@@ -193,9 +199,32 @@ class Form(ttk.Frame):
         self._datetime_ok = dateE >= dateR
         return self._title_ok and self._duration_ok and self._datetime_ok
     
+    def _get_new_data(self):
+        data = {}
+        data['title'] = self._strvar_title.get()
+        data['detail'] = self._detail_text.get('1.0', tk.END)
+        data['datetimeE'] = datetime.strptime(f"{self._dateE_Button['text']} {self._timeE_Button['text']}:00",
+                                  '%d-%m-%Y %H:%M:%S')
+        data['datetimeR'] = datetime.strptime(f"{self._dateR_Button['text']} {self._timeR_Button['text']}:00",
+                                  '%d-%m-%Y %H:%M:%S')
+        data['duration'] = self._duration_spinbox.get()
+        data['relevance'] = ['normal','importante'].index(self._option.get())
+        data['tags'] = tuple(Tag.tag_list)
+
+        return data
+    
     def _action_button_accept(self):
         if self._congruent_data():
-            pass
+            newdata = self._get_new_data()
+            if self._data != None:
+                newdata['id'] = self._data['id']
+                if self._data != newdata:
+                    self._extra_function(**newdata)
+                    self._extra_function2()
+            else:
+                self._extra_function(**newdata)
+                self._extra_function2()
+            self._parent.destroy()
         else:
             if not(self._title_ok):
                 messagebox.showerror('Error Titulo', "El titulo del evento no puede estar vacio.")
