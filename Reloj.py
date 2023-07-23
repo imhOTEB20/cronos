@@ -16,6 +16,8 @@ class Reloj(ttk.Frame):
         self._clock_string = tk.StringVar()
         self._date_string = tk.StringVar()
 
+        self.flag = True
+
         self._day_name = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"]
         self._month_name = ["","Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 
@@ -37,7 +39,7 @@ class Reloj(ttk.Frame):
     
     def _clock_update(self):
         #funcion que actualiza el texto de los label de fecha y hora
-        while True:
+        while self.flag:
             self.today = datetime.today()
             if self.today.hour>9:
                 if self.today.minute>9:
