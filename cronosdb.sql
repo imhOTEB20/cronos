@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `cronosdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `cronosdb`;
 -- MySQL dump 10.13  Distrib 8.0.33, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cronosdb
@@ -7,7 +9,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -26,7 +28,7 @@ CREATE TABLE `etiquetas` (
   `idEtiqueta` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idEtiqueta`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +37,7 @@ CREATE TABLE `etiquetas` (
 
 LOCK TABLES `etiquetas` WRITE;
 /*!40000 ALTER TABLE `etiquetas` DISABLE KEYS */;
-INSERT INTO `etiquetas` VALUES (1,'cumpleaños'),(2,'torta'),(3,'comprar'),(4,'gordencia'),(65,'estudiar'),(66,'ingles'),(67,'programacion'),(68,'no procastines'),(69,'programacion 2');
+INSERT INTO `etiquetas` VALUES (1,'cumpleaños'),(2,'torta'),(3,'comprar'),(4,'gordencia'),(65,'estudiar'),(66,'ingles'),(67,'programacion'),(68,'no procastines'),(69,'programacion 2'),(70,'Prueba'),(71,'Agregar Evento'),(72,'eliminar');
 /*!40000 ALTER TABLE `etiquetas` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,7 +64,7 @@ CREATE TABLE `evento_etiqueta` (
 
 LOCK TABLES `evento_etiqueta` WRITE;
 /*!40000 ALTER TABLE `evento_etiqueta` DISABLE KEYS */;
-INSERT INTO `evento_etiqueta` VALUES (1,1),(1,2),(1,3),(1,4),(49,65),(49,66),(50,68),(50,69);
+INSERT INTO `evento_etiqueta` VALUES (1,1),(49,65),(49,66),(51,70),(51,71),(56,70);
 /*!40000 ALTER TABLE `evento_etiqueta` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,7 +84,7 @@ CREATE TABLE `eventos` (
   `detalle` varchar(100) DEFAULT NULL,
   `import` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`idEvento`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,7 +93,7 @@ CREATE TABLE `eventos` (
 
 LOCK TABLES `eventos` WRITE;
 /*!40000 ALTER TABLE `eventos` DISABLE KEYS */;
-INSERT INTO `eventos` VALUES (1,'cumpleaños de can can',60,'2023-07-06 12:00:00','2023-07-06 00:00:00','cumpleaños de la gordencia, comprar torta',1),(49,'estudiar ingles',120,'2023-07-17 14:32:34','2023-07-01 00:00:00','DEBES ESTUDIAR SI O SI',1),(50,'estudiar programacion2',200,'2023-07-17 16:38:09','2023-07-02 00:00:00','DEBES ESTUDIAR',1);
+INSERT INTO `eventos` VALUES (1,'cumpleaños de can can',60,'2023-07-06 12:00:00','2023-07-06 00:00:00','cumpleaños de la gordencia, comprar torta\n\n',1),(49,'estudiar ingles',120,'2023-07-17 14:32:34','2023-07-01 00:00:00','DEBES ESTUDIAR SI O SI',1),(51,'Prueba',63,'2023-07-23 01:19:00','2023-07-23 01:19:00','Esto es una prueba para evaluar el funcionamiento del boton agragar evento\n\n',1),(54,'prueba3',60,'2023-07-05 02:43:00','2023-07-04 02:43:00','\n',0),(56,'prueba5',60,'2023-07-23 03:02:00','2023-07-23 03:02:00','esta prueba esta diseñada para verificar que se refresca la lista al agregar un evento\n\n',0);
 /*!40000 ALTER TABLE `eventos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -104,4 +106,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-07-20  0:57:35
+-- Dump completed on 2023-08-04 12:44:57
